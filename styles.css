@@ -1,0 +1,32 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+/* Google map */
+#map {
+  /* set the map to fit whole screen */
+  height: 100%;
+}
+
+#restaurantList {
+  position: absolute;
+  top: 20%;
+  right: 5%;
+  z-index: 99;
+  color: white;
+  background-color: rgba(15, 3, 38, 0.6);
+  list-style-type: none;
+  padding: 20px;
+  padding-left: 25px;
+  width: 220px;
+  max-height: 50%;
+  overflow: auto;
+}
+
+/* infowindow */
+.gm-style-iw {
+  font-family: 'Noto Sans TC', sans-serif;
+}
