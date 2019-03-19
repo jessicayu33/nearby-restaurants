@@ -1,7 +1,7 @@
 RedSo Technical Challenge  
 Jessica Yu  
 
-Features:  
+Features:
 - Restaurant listing (order by distance)
 - Restaurant detail
 - Refreshing listing when map boundary is updated
