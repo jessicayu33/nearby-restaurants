@@ -1,6 +1,7 @@
 // global variables
-var map;
+var map;  // google map object
 var markers = [];  // array of markers on map
+var infowindows = [];  // array of infowindows on map
 
 function initMap() {
   // initial map center position
@@ -34,14 +35,17 @@ function initMap() {
         // clear original restaurant list again to avoid dulplicates
         $("#restaurantList").empty();
 
-        // console.log(results);
-
         // put their markers on map
         createMarkers(results);
 
         // append their name into restaurant list
         for (let result of results) {
-          $("#restaurantList").append('<li id="' + result.id + '">' + result.name + '</li>');
+          let $new;
+          $new = $('<li id="' + result.id + '">' + result.name + '</li>');
+          $new.click(function () {
+            openInfowindow(result.id);
+          });
+          $("#restaurantList").append($new);
         }
       });
   });
@@ -54,15 +58,15 @@ function createMarkers(places) {
   }
 
   for (let place of places) {
-    // set content in the infowindow
+    // set content inside infowindow
     var infoContent;
     if (place.rating) {  // has rating
-      infoContent = place.name + "<br>" + place.vicinity + "<br>評分: " + place.rating + "/5";
+      infoContent = "<b>" + place.name + "</b><br>" + place.vicinity + "<br>評分: " + place.rating + "/5";
     } else {  // no rating
-      infoContent = place.name + "<br>" + place.vicinity + "<br>評分: N/A";
+      infoContent = "<b>" + place.name + "</b><br>" + place.vicinity + "<br>評分: N/A";
     }
 
-    // set up infowindow
+    // init infowindow
     var infowindow = new google.maps.InfoWindow({
       content: ''
     });
@@ -80,26 +84,36 @@ function createMarkers(places) {
 
     // marker click event --> popup its infowindow
     google.maps.event.addListener(marker, 'click', function () {
+      closeAllInfowindows();
       infowindow.setContent(this.info);
+      infowindows.push(infowindow);
       // open infowindow
       infowindow.open(map, this);
 
-      // reset list names color
+      // reset list color & hover style
       $("#restaurantList li").css("color", "white");
-
-      var resid = this.id;
-      $("#restaurantList li").each(function () {
-        // highlight its name on the list
-        if ($(this).attr('id') == resid) {
-          $(this).css("color", "yellow");
-        }
+      $("#restaurantList li").hover(function () {
+        $(this).css({ "cursor": "pointer", "color": "yellow" });
+      }, function () {
+        $(this).css("color", "white");
       });
     });
+  }
+}
 
-    // close infowindow event
-    google.maps.event.addListener(infowindow, 'closeclick', function () {
-      // reset list names color
-      $("#restaurantList li").css("color", "white");
-    });
+function openInfowindow(resId) {
+  closeAllInfowindows();
+  for (let marker of markers) {
+    if (marker.id === resId) {
+      // click the marker of this restaurant
+      google.maps.event.trigger(marker, 'click');
+      return;
+    }
+  }
+}
+
+function closeAllInfowindows() {
+  for (let infowindow of infowindows) {
+    infowindow.close();
   }
 }

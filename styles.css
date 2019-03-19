@@ -26,6 +26,11 @@ html, body {
   overflow: auto;
 }
 
+#restaurantList li:hover {
+  cursor: pointer;
+  color: yellow;
+}
+
 /* infowindow */
 .gm-style-iw {
   font-family: 'Noto Sans TC', sans-serif;
